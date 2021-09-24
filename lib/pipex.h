@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/24 10:45:45 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 15:32:59 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ void	pipex_freecmd(void *node);
 void	pipex_printlist(t_list *cmds);
 
 /* Finds correct path for a shell command and returns it as a string */
-char	*find_command(char *argv, char **envp);
+char	*find_command(char *argv, char **env_path);
 
 #endif
