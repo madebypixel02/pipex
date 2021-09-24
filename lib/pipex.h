@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/24 19:15:53 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 20:57:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ typedef struct s_pipexcmd
 {
 	char	*full_path;
 	char	**cmd;
-	char	*file;
 }				t_pipexcmd;
 
 /* Creates new node storing the command and the file */
-t_list	*pipex_lstnew(char *full_path, char **cmd, char *file);
+t_list	*pipex_lstnew(char *full_path, char **cmd);
 
 /* Frees all stuf inside pipexcmd struct */
 void	pipex_freecmd(void *node);
@@ -41,6 +40,6 @@ void	pipex_freecmd(void *node);
 void	pipex_printlist(t_list *cmds);
 
 /* Finds correct path for a shell command and returns it as a string */
-char	*find_command(char *argv, char **env_path);
+char	*find_command(char *cmd, char **env_path);
 
 #endif

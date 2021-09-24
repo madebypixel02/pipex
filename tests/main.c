@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/24 19:34:26 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 21:01:35 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-char	*find_command(char *argv, char **env_path)
+char	*find_command(char *cmd, char **env_path)
 {
 	char	*full_path;
 	char	*temp;
@@ -28,7 +28,7 @@ char	*find_command(char *argv, char **env_path)
 		temp = ft_strjoin(env_path[i], "/");
 		if (!temp)
 			return (NULL);
-		full_path = ft_strjoin(temp, argv);
+		full_path = ft_strjoin(temp, cmd);
 		free(temp);
 		if (!full_path)
 			return (NULL);
@@ -47,31 +47,16 @@ void	parse_commands(int argc, char **argv, char **env_path, t_list **cmds)
 {
 	int		i;
 	char	*full_path;
+	char	**cmd;
 
-	i = 0;
-	while (argv[++i] && argv[i + 1])
+	i = 1;
+	while (++i < argc - 1)
 	{
-		if (i == 1)
-		{
-			full_path = find_command(argv[i + 1], env_path);
-			ft_lstadd_back(cmds, pipex_lstnew(full_path, \
-				ft_split(argv[i + 1], ' '), argv[i]));
-			i++;
-		}
-		else
-		{
-			full_path = find_command(argv[i], env_path);
-			if (i == argc - 2)
-			{
-				ft_lstadd_back(cmds, pipex_lstnew(full_path, \
-					ft_split(argv[i], ' '), argv[i + 1]));
-				i++;
-			}
-			else
-				ft_lstadd_back(cmds, pipex_lstnew(full_path, \
-					ft_split(argv[i], ' '), NULL));
-		}
+		cmd = ft_split(argv[i], ' ');
+		full_path = find_command(*cmd, env_path);
+		ft_lstadd_back(cmds, pipex_lstnew(full_path, cmd));
 		free(full_path);
+		cmd = NULL;
 	}
 }
 
@@ -82,6 +67,8 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 5)
 		return (ft_putstr_fd("Incorrect number of arguments!\n", 2));
+	if (access(argv[1], F_OK | R_OK) == -1)
+		return (ft_putstr_fd("Input file unavailable for reading\n", 1));
 	cmds = NULL;
 	while (!ft_strnstr(*envp, "PATH", ft_strlen(*envp)))
 		envp++;

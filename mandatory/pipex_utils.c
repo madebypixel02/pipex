@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/24 19:33:10 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 20:58:55 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ void	pipex_freecmd(void *node)
 
 	temp = (struct s_pipexcmd *)node;
 	free(temp->full_path);
-	free(temp->file);
 	ft_free_matrix(&temp->cmd);
 	free(temp);
 }
 
-static t_pipexcmd	*pipxex_newcmd(char *full_path, char **cmd, char *file)
+static t_pipexcmd	*pipxex_newcmd(char *full_path, char **cmd)
 {
 	t_pipexcmd	*newcmd;
 
@@ -39,24 +38,17 @@ static t_pipexcmd	*pipxex_newcmd(char *full_path, char **cmd, char *file)
 		return (NULL);
 	}
 	newcmd->cmd = cmd;
-	newcmd->file = ft_strdup(file);
-	if (file && !newcmd->file)
-	{
-		free(newcmd->full_path);
-		free(newcmd);
-		return (NULL);
-	}
 	return (newcmd);
 }
 
-t_list	*pipex_lstnew(char *full_path, char **cmd, char *file)
+t_list	*pipex_lstnew(char *full_path, char **cmd)
 {
 	t_list	*newnode;
 
 	newnode = malloc(sizeof(t_list));
 	if (!newnode)
 		return (NULL);
-	newnode->content = pipxex_newcmd(full_path, cmd, file);
+	newnode->content = pipxex_newcmd(full_path, cmd);
 	if (!newnode->content)
 	{
 		free(newnode);
@@ -86,10 +78,6 @@ void	pipex_printlist(t_list *cmds)
 			ft_putchar_fd(' ', 1);
 			temp++;
 		}
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("File: ", 1);
-		if (cmd->file)
-			ft_putstr_fd(cmd->file, 1);
 		ft_putstr_fd("\n\n", 1);
 		cmds = cmds->next;
 	}
