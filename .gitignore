@@ -1,0 +1,10 @@
+libft
+a.out
+*.o
+*.so
+*.a
+.DS_Store
+tempCodeRunnerFile.c
+*.swp
+vgcore*
+pipex
