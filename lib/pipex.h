@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/22 21:46:45 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 10:45:45 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include "../libft/lib/libft.h"
+
+# define READ_FD 0
+# define WRITE_FD 1
 
 /* Struct to store every command with its corresponding file */
 typedef struct s_pipexcmd
@@ -35,5 +38,8 @@ void	pipex_freecmd(void *node);
 
 /* Prints linked list of commands */
 void	pipex_printlist(t_list *cmds);
+
+/* Finds correct path for a shell command and returns it as a string */
+char	*find_command(char *argv, char **envp);
 
 #endif

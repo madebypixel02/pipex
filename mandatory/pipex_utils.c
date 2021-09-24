@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/22 19:30:01 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/22 21:29:46 by aperez-b         ###   ########.fr       */
+/*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
+/*   Updated: 2021/09/24 14:08:19 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static t_pipexcmd	*pipxex_newcmd(char *cmd, char *file)
 	newcmd->file = ft_strdup(file);
 	if (file && !newcmd->file)
 	{
+		free(newcmd->cmd);
 		free(newcmd);
 		return (NULL);
 	}
