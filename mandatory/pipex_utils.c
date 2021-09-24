@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/24 14:08:19 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 19:33:10 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,46 @@ void	pipex_freecmd(void *node)
 	t_pipexcmd	*temp;
 
 	temp = (struct s_pipexcmd *)node;
-	free(temp->cmd);
+	free(temp->full_path);
 	free(temp->file);
+	ft_free_matrix(&temp->cmd);
 	free(temp);
 }
 
-static t_pipexcmd	*pipxex_newcmd(char *cmd, char *file)
+static t_pipexcmd	*pipxex_newcmd(char *full_path, char **cmd, char *file)
 {
 	t_pipexcmd	*newcmd;
 
+	if (!cmd)
+		return (NULL);
 	newcmd = malloc(sizeof(t_pipexcmd));
 	if (!newcmd)
 		return (NULL);
-	newcmd->cmd = ft_strdup(cmd);
-	if (cmd && !newcmd->cmd)
+	newcmd->full_path = ft_strdup(full_path);
+	if (full_path && !newcmd->full_path)
 	{
 		free(newcmd);
 		return (NULL);
 	}
+	newcmd->cmd = cmd;
 	newcmd->file = ft_strdup(file);
 	if (file && !newcmd->file)
 	{
-		free(newcmd->cmd);
+		free(newcmd->full_path);
 		free(newcmd);
 		return (NULL);
 	}
 	return (newcmd);
 }
 
-t_list	*pipex_lstnew(char *cmd, char *file)
+t_list	*pipex_lstnew(char *full_path, char **cmd, char *file)
 {
 	t_list	*newnode;
 
 	newnode = malloc(sizeof(t_list));
 	if (!newnode)
 		return (NULL);
-	newnode->content = pipxex_newcmd(cmd, file);
+	newnode->content = pipxex_newcmd(full_path, cmd, file);
 	if (!newnode->content)
 	{
 		free(newnode);
@@ -65,23 +69,28 @@ t_list	*pipex_lstnew(char *cmd, char *file)
 void	pipex_printlist(t_list *cmds)
 {
 	t_pipexcmd	*cmd;
+	char		**temp;
 
 	while (cmds)
 	{
 		cmd = (struct s_pipexcmd *)cmds->content;
+		ft_putstr_fd("Path: ", 1);
+		if (cmd->full_path)
+			ft_putstr_fd(cmd->full_path, 1);
+		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("Command: ", 1);
-		if (cmd->cmd)
-			ft_putstr_fd(cmd->cmd, 1);
-		else
-			ft_putstr_fd("(null)", 1);
+		temp = cmd->cmd;
+		while (*temp)
+		{
+			ft_putstr_fd(*temp, 1);
+			ft_putchar_fd(' ', 1);
+			temp++;
+		}
 		ft_putstr_fd("\n", 1);
 		ft_putstr_fd("File: ", 1);
 		if (cmd->file)
 			ft_putstr_fd(cmd->file, 1);
-		else
-			ft_putstr_fd("(null)", 1);
-		ft_putstr_fd("\n", 1);
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n\n", 1);
 		cmds = cmds->next;
 	}
 }

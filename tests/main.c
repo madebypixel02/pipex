@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/24 15:40:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/24 19:34:26 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,32 @@ char	*find_command(char *argv, char **env_path)
 void	parse_commands(int argc, char **argv, char **env_path, t_list **cmds)
 {
 	int		i;
-	char	*command;
+	char	*full_path;
 
 	i = 0;
 	while (argv[++i] && argv[i + 1])
 	{
 		if (i == 1)
 		{
-			command = find_command(argv[i + 1], env_path);
-			ft_lstadd_back(cmds, pipex_lstnew(command, argv[i]));
+			full_path = find_command(argv[i + 1], env_path);
+			ft_lstadd_back(cmds, pipex_lstnew(full_path, \
+				ft_split(argv[i + 1], ' '), argv[i]));
 			i++;
 		}
 		else
 		{
-			command = find_command(argv[i], env_path);
+			full_path = find_command(argv[i], env_path);
 			if (i == argc - 2)
 			{
-				ft_lstadd_back(cmds, pipex_lstnew(command, argv[i + 1]));
+				ft_lstadd_back(cmds, pipex_lstnew(full_path, \
+					ft_split(argv[i], ' '), argv[i + 1]));
 				i++;
 			}
 			else
-				ft_lstadd_back(cmds, pipex_lstnew(command, NULL));
+				ft_lstadd_back(cmds, pipex_lstnew(full_path, \
+					ft_split(argv[i], ' '), NULL));
 		}
-		free(command);
+		free(full_path);
 	}
 }
 
