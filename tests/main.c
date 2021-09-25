@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 16:37:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 17:00:06 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 	char	*full_path;
 	char	**cmd;
 	t_list	*cmds;
+	int		temp;
 
 	cmds = NULL;
 	i = 1;
@@ -59,8 +60,11 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 		cmd = ft_split(argv[i], ' ');
 		if (!cmd)
 			return ((t_list *)pipex_exit(data, NULL, NO_MEMORY, NULL));
-		if (find_command(data, *cmd, &full_path) < 0)
+		temp = find_command(data, *cmd, &full_path);
+		if (temp == -1)
 			return (pipex_exit(data, *cmd, CMD_NOT_FOUND, &cmd));
+		if (temp == -2)
+			return (pipex_exit(data, NULL, NO_MEMORY, &cmd));
 		ft_lstadd_back(&cmds, pipex_lstnew(full_path, cmd));
 		free(full_path);
 	}
@@ -80,5 +84,6 @@ int	main(int argc, char **argv, char **envp)
 		return (*(int *)pipex_exit(data, argv[1], NO_PERM, NULL));
 	data = pipex_get_data(argc, argv, envp);
 	pipex_printlist(data->cmds);
+	pipex(data, envp);
 	return (*(int *)pipex_exit(data, NULL, 1, NULL));
 }

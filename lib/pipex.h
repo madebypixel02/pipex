@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 16:36:59 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 17:15:10 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define READ_FD 0
 # define WRITE_FD 1
 
+/* Enum for error handling */
 enum e_pipex_error
 {
 	CMD_NOT_FOUND = 0,
@@ -33,6 +34,7 @@ enum e_pipex_error
 	NO_MEMORY = -4
 };
 
+/* Struct to store fds and linked list */
 typedef struct s_pipexdata
 {
 	int		input_fd;
@@ -73,6 +75,6 @@ void		pipex_perror(char *param, int err);
 void		*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd);
 
 /* Creates a set of fds and forks to pass the output to a new command */
-void		*pipex(int io_fd[2], t_list *cmds, char **envp);
+void		*pipex(t_pipexdata *data, char **envp);
 
 #endif

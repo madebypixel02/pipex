@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 16:37:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 17:20:42 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,21 +109,20 @@ static void	*recursive_pipex(t_list *cmds, char **envp)
 	return (NULL);
 }
 
-void	*pipex(int io_fd[2], t_list *cmds, char **envp)
+void	*pipex(t_pipexdata *data, char **envp)
 {
 	t_pipexcmd	*cmd;
 
-	cmd = (struct s_pipexcmd *)cmds;
-	if (!cmds)
-		return (NULL);
-	if (dup2(io_fd[0], STDIN_FILENO) == -1)
-		return (NULL);
+	cmd = (struct s_pipexcmd *)data->cmds->content;
+	if (!cmd)
+		return (pipex_exit(data, NULL, 1, NULL));
+	if (dup2(data->input_fd, STDIN_FILENO) == -1)
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
 	execve(cmd->full_path, cmd->cmd, envp);
-	close(io_fd[0]);
-	recursive_pipex(cmds, envp);
-	printf("%s\n", "HELLO!\n");
-	if (dup2(STDIN_FILENO, io_fd[1]) == -1)
-		return (NULL);
-	close(io_fd[1]);
+	close(data->input_fd);
+	recursive_pipex(data->cmds, envp);
+	if (dup2(STDIN_FILENO, data->output_fd) == -1)
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+	close(data->output_fd);
 	return (NULL);
 }
