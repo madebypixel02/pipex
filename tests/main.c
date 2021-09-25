@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 14:17:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 15:06:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,15 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 		data->cmds = cmds;
 		cmd = ft_split(argv[i], ' ');
 		if (!cmd)
-			return ((t_list *)pipex_exit(data, \
-				"pipex: device out of memory\n", 2));
+		{
+			pipex_perror(NULL, NO_MEMORY);
+			return ((t_list *)pipex_exit(data));
+		}
 		if (find_command(data, *cmd, &full_path) < 0)
 		{
-			pipex_cmd_not_found(*cmd);
+			pipex_perror(*cmd, CMD_NOT_FOUND);
 			ft_free_matrix(&cmd);
-			return (pipex_exit(data, NULL, 2));
+			return (pipex_exit(data));
 		}
 		ft_lstadd_back(&cmds, pipex_lstnew(full_path, cmd));
 		free(full_path);
@@ -78,12 +80,19 @@ int	main(int argc, char **argv, char **envp)
 
 	data = NULL;
 	if (argc < 5)
-		return (*(int *)pipex_exit(data, \
-			"pipex: incorrect number of arguments!\n", 2));
+	{
+		pipex_perror(NULL, INV_ARGS);
+		return (*(int *)pipex_exit(data));
+	}
 	if (access(argv[1], F_OK | R_OK) == -1)
-		return (*(int *)pipex_exit(data, \
-			"pipex: input file unavailable for reading\n", 2));
+	{
+		if (access(argv[1], F_OK) == -1)
+			pipex_perror(argv[1], NO_SUCH_FILE);
+		else if (access(argv[1], R_OK) == -1)
+			pipex_perror(argv[1], PERM_DENIED);
+		return (*(int *)pipex_exit(data));
+	}
 	data = pipex_get_data(argc, argv, envp);
 	pipex_printlist(data->cmds);
-	return (*(int *)pipex_exit(data, NULL, 1));
+	return (*(int *)pipex_exit(data));
 }

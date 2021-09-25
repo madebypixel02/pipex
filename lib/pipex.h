@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 14:16:50 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 15:05:48 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@
 
 # define READ_FD 0
 # define WRITE_FD 1
+
+enum e_pipex_error
+{
+	CMD_NOT_FOUND = 0,
+	NO_SUCH_FILE = -1,
+	PERM_DENIED = -2,
+	INV_ARGS = -3,
+	NO_MEMORY = -4
+};
 
 typedef struct s_pipexdata
 {
@@ -58,10 +67,10 @@ t_list		*parse_commands(int argc, char **argv, t_pipexdata *data);
 t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp);
 
 /* Prints "command not found" for given command to sderr  */
-void		pipex_cmd_not_found(char *cmd);
+void		pipex_perror(char *param, int err_type);
 
 /* Closes open file descriptors and frees struct */
-void		*pipex_exit(t_pipexdata *data, char *msg, int fd);
+void		*pipex_exit(t_pipexdata *data);
 
 /* Creates a set of fds and forks to pass the output to a new command */
 void		*pipex(int io_fd[2], t_list *cmds, char **envp);
