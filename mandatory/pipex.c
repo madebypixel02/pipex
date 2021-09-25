@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 17:20:42 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 17:39:42 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp)
 	data->input_fd = open(argv[1], O_RDONLY);
 	if (data->input_fd == -1)
 		return ((t_pipexdata *)pipex_exit(data, argv[1], NO_FILE, NULL));
-	data->output_fd = open(argv[argc - 1], O_CREAT | O_RDWR, 0666);
+	data->output_fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (access(argv[argc - 1], F_OK) == -1)
 		return ((t_pipexdata *)pipex_exit(data, argv[argc - 1], NO_FILE, NULL));
 	if (access(argv[argc - 1], W_OK) == -1)
@@ -118,11 +118,11 @@ void	*pipex(t_pipexdata *data, char **envp)
 		return (pipex_exit(data, NULL, 1, NULL));
 	if (dup2(data->input_fd, STDIN_FILENO) == -1)
 		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
-	execve(cmd->full_path, cmd->cmd, envp);
-	close(data->input_fd);
-	recursive_pipex(data->cmds, envp);
-	if (dup2(STDIN_FILENO, data->output_fd) == -1)
+	if (dup2(data->output_fd, STDOUT_FILENO) == -1)
 		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+	execve(cmd->full_path, cmd->cmd, envp);
+	recursive_pipex(data->cmds, envp);
+	close(data->input_fd);
 	close(data->output_fd);
 	return (NULL);
 }
