@@ -6,8 +6,18 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/22 18:58:21 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 09:20:07 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib/pipex.h"
+#include <bits/types/struct_iovec.h>
+
+/*void	*pipex(int fd[2], int io_fd[2], t_list *cmds);
+{
+	if (io_fd[0] != -1)
+	{
+		
+	}
+
+}*/
