@@ -8,3 +8,5 @@ tempCodeRunnerFile.c
 *.swp
 vgcore*
 pipex
+infile
+outfile
