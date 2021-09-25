@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 15:06:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 16:37:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,9 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 		data->cmds = cmds;
 		cmd = ft_split(argv[i], ' ');
 		if (!cmd)
-		{
-			pipex_perror(NULL, NO_MEMORY);
-			return ((t_list *)pipex_exit(data));
-		}
+			return ((t_list *)pipex_exit(data, NULL, NO_MEMORY, NULL));
 		if (find_command(data, *cmd, &full_path) < 0)
-		{
-			pipex_perror(*cmd, CMD_NOT_FOUND);
-			ft_free_matrix(&cmd);
-			return (pipex_exit(data));
-		}
+			return (pipex_exit(data, *cmd, CMD_NOT_FOUND, &cmd));
 		ft_lstadd_back(&cmds, pipex_lstnew(full_path, cmd));
 		free(full_path);
 	}
@@ -80,19 +73,12 @@ int	main(int argc, char **argv, char **envp)
 
 	data = NULL;
 	if (argc < 5)
-	{
-		pipex_perror(NULL, INV_ARGS);
-		return (*(int *)pipex_exit(data));
-	}
-	if (access(argv[1], F_OK | R_OK) == -1)
-	{
-		if (access(argv[1], F_OK) == -1)
-			pipex_perror(argv[1], NO_SUCH_FILE);
-		else if (access(argv[1], R_OK) == -1)
-			pipex_perror(argv[1], PERM_DENIED);
-		return (*(int *)pipex_exit(data));
-	}
+		return (*(int *)pipex_exit(data, NULL, INV_ARGS, NULL));
+	if (access(argv[1], F_OK) == -1)
+		return (*(int *)pipex_exit(data, argv[1], NO_FILE, NULL));
+	if (access(argv[1], R_OK) == -1)
+		return (*(int *)pipex_exit(data, argv[1], NO_PERM, NULL));
 	data = pipex_get_data(argc, argv, envp);
 	pipex_printlist(data->cmds);
-	return (*(int *)pipex_exit(data));
+	return (*(int *)pipex_exit(data, NULL, 1, NULL));
 }

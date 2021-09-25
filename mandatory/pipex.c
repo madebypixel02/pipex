@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 15:06:45 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 16:37:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,30 +59,23 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp)
 	i = 0;
 	data = malloc(sizeof(struct s_pipexdata));
 	if (!data)
-	{
-		pipex_perror(NULL, NO_MEMORY);
-		return ((t_pipexdata *)pipex_exit(data));
-	}
+		return ((t_pipexdata *)pipex_exit(data, NULL, NO_MEMORY, NULL));
+	data->env_path = NULL;
+	data->env_path = NULL;
+	data->cmds = NULL;
 	data->input_fd = open(argv[1], O_RDONLY);
 	if (data->input_fd == -1)
-	{
-		pipex_perror(argv[1], NO_SUCH_FILE);
-		return ((t_pipexdata *)pipex_exit(data));
-	}
+		return ((t_pipexdata *)pipex_exit(data, argv[1], NO_FILE, NULL));
 	data->output_fd = open(argv[argc - 1], O_CREAT | O_RDWR, 0666);
-	if (data->output_fd == -1)
-	{
-		pipex_perror(argv[argc - 1], NO_SUCH_FILE);
-		return ((t_pipexdata *)pipex_exit(data));
-	}
+	if (access(argv[argc - 1], F_OK) == -1)
+		return ((t_pipexdata *)pipex_exit(data, argv[argc - 1], NO_FILE, NULL));
+	if (access(argv[argc - 1], W_OK) == -1)
+		return ((t_pipexdata *)pipex_exit(data, argv[argc - 1], NO_PERM, NULL));
 	while (!ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])))
 		i++;
 	data->env_path = ft_split(envp[i], ':');
 	if (!data->env_path)
-	{
-		pipex_perror(NULL, NO_MEMORY);
-		return ((t_pipexdata *)pipex_exit(data));
-	}
+		return ((t_pipexdata *)pipex_exit(data, NULL, NO_MEMORY, NULL));
 	data->cmds = parse_commands(argc, argv, data);
 	return (data);
 }

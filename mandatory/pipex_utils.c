@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 15:06:59 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 16:37:09 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,36 +47,41 @@ void	pipex_printlist(t_list *cmds)
 	}
 }
 
-void	*pipex_exit(t_pipexdata *data)
+void	*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd)
 {
+	if (err < 1 || param)
+		pipex_perror(param, err);
+	if (cmd)
+		ft_free_matrix(cmd);
 	if (data)
 	{
 		close(data->input_fd);
 		close(data->output_fd);
 		if (data->cmds)
 			ft_lstclear(&data->cmds, pipex_freecmd);
-		ft_free_matrix(&data->env_path);
+		if (data->env_path)
+			ft_free_matrix(&data->env_path);
 		free(data);
 	}
 	exit(0);
 	return (0);
 }
 
-void	pipex_perror(char *param, int err_type)
+void	pipex_perror(char *param, int err)
 {
 	ft_putstr_fd(RED, 2);
-	ft_putstr_fd("pipex: ", 2); 
-	if (err_type == CMD_NOT_FOUND)
+	ft_putstr_fd("pipex: ", 2);
+	if (err == CMD_NOT_FOUND)
 		ft_putstr_fd("command not found: ", 2);
-	if (err_type == NO_SUCH_FILE)
+	if (err == NO_FILE)
 		ft_putstr_fd("no such file or directory: ", 2);
-	if (err_type == PERM_DENIED)
+	if (err == NO_PERM)
 		ft_putstr_fd("permission denied: ", 2);
-	if (err_type == INV_ARGS)
+	if (err == INV_ARGS)
 		ft_putstr_fd("invalid number of arguments", 2);
-	if (err_type == NO_MEMORY)
+	if (err == NO_MEMORY)
 		ft_putstr_fd("no memory left on device", 2);
-	if (param && err_type != INV_ARGS && err_type != NO_MEMORY)
+	if (param && err != INV_ARGS && err != NO_MEMORY)
 		ft_putstr_fd(param, 2);
 	ft_putchar_fd('\n', 2);
 	ft_putstr_fd(DEFAULT, 2);
