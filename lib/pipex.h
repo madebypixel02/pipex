@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 09:19:14 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 10:26:01 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	pipex_printlist(t_list *cmds);
 /* Finds correct path for a shell command and returns it as a string */
 char	*find_command(char *cmd, char **env_path);
 
+/* Closes open file descriptors and frees struct */
+int		pipex_exit(int io_fd[2], t_list **cmds, char ***env_path);
+
 /* Creates a set of fds and forks to pass the output to a new command */
-void	*pipex(int fd[2], int io_fd[2], t_list *cmds);
+void	*pipex(int io_fd[2], t_list *cmds, char **envp);
 
 #endif

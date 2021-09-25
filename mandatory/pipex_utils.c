@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 08:58:51 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/25 10:26:34 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,13 @@ void	pipex_printlist(t_list *cmds)
 		ft_putstr_fd("\n\n", 1);
 		cmds = cmds->next;
 	}
+}
+
+int	pipex_exit(int io_fd[2], t_list **cmds, char ***env_path)
+{
+	close(io_fd[0]);
+	close(io_fd[1]);
+	ft_lstclear(cmds, pipex_freecmd);
+	ft_free_matrix(env_path);
+	return (0);
 }
