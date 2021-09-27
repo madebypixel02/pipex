@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/09/27 18:38:14 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/09/27 20:19:30 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 CC = gcc -MD
 SRC_DIR = src
-SRCB_DIR = src_bonus
+SRCB_DIR = srcb
 OBJ_DIR = obj
 OBJB_DIR = objb
 BIN_DIR = bin
@@ -66,6 +66,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
 
 bonus: all
+	@$(ECHO) "$(MAGENTA)Bonus Compilation Complete in $(BIN)!$(DEFAULT)"
 
 compile_libft:
 	@make all -C libft/
@@ -84,17 +85,17 @@ clean:
 	@$(ECHO) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)"
 	@make clean -C libft
 	@$(RM) -r $(OBJ_DIR)
+	@$(RM) -r $(OBJB_DIR)
 
 fclean: clean
 	@$(RM) -r $(BIN_DIR)
 	@$(RM) $(LIBFT)
-	@$(RM) $(NAME)
 	@$(ECHO) "$(CYAN)Removed $(NAME)$(DEFAULT)"
 	@$(ECHO) "$(CYAN)Removed $(LIBFT)$(DEFAULT)"
 
 norminette:
-	@$(ECHO) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)"
-	@norminette -R CheckForbiddenSourceHeader $(SRC_M) $(SRC_B) inc/
+	@$(ECHO) "$(CYAN)\nChecking norm for $(BIN)...$(DEFAULT)"
+	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) $(SRCB_DIR) inc/
 	@make norminette -C libft/
 
 re: fclean all
