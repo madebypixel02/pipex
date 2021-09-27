@@ -6,11 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 17:00:06 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/27 17:20:01 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../lib/pipex.h"
+#include "../inc/pipex.h"
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <unistd.h>

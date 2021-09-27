@@ -6,11 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 17:39:42 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:59:51 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../lib/pipex.h"
+#include "../inc/pipex.h"
 #include <bits/types/struct_iovec.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -80,31 +80,33 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp)
 	return (data);
 }
 
-static void	*recursive_pipex(t_list *cmds, char **envp)
+static void	*recursive_pipex(t_pipexdata *data, char **envp)
 {
 	int			fd[2];
 	pid_t		pid;
 	t_pipexcmd	*cmd;
 
-	cmd = (struct s_pipexcmd *)cmds;
+	cmd = (struct s_pipexcmd *)data->cmds;
 	if (pipe(fd) == -1)
-		return (NULL);
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
 	pid = fork();
 	if (pid == -1)
-		return (NULL);
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
 	if (!pid)
 	{
 		close(fd[WRITE_FD]);
-		if (dup2(fd[READ_FD], STDIN_FILENO) == -1)
-			return (NULL);
-		close(fd[READ_FD]);
+		if (dup2(STDIN_FILENO, fd[READ_FD]) == -1)
+			return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+		//close(fd[READ_FD]);
+		if (dup2(fd[READ_FD], data->output_fd) == -1)
+			return (pipex_exit(data, NULL, NO_MEMORY, NULL));
 		execve(cmd->full_path, cmd->cmd, envp);
-		exit(0);
-		return (NULL);
+		return (pipex_exit(data, NULL, 1, NULL));
 	}
 	close(fd[READ_FD]);
-	if (dup2(STDIN_FILENO, fd[WRITE_FD]) == -1)
-		return (NULL);
+	if (dup2(STDOUT_FILENO, fd[WRITE_FD]) == -1)
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+	execve(cmd->full_path, cmd->cmd, envp);
 	waitpid(-1, NULL, 0);
 	return (NULL);
 }
@@ -112,16 +114,22 @@ static void	*recursive_pipex(t_list *cmds, char **envp)
 void	*pipex(t_pipexdata *data, char **envp)
 {
 	t_pipexcmd	*cmd;
+	//int			fd[2];
 
 	cmd = (struct s_pipexcmd *)data->cmds->content;
 	if (!cmd)
 		return (pipex_exit(data, NULL, 1, NULL));
 	if (dup2(data->input_fd, STDIN_FILENO) == -1)
 		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
-	if (dup2(data->output_fd, STDOUT_FILENO) == -1)
+	/*if (pipe(fd) == -1)
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+	close(fd[WRITE_FD]);
+	if (dup2(fd[READ_FD], STDOUT_FILENO) == -1)
 		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
 	execve(cmd->full_path, cmd->cmd, envp);
-	recursive_pipex(data->cmds, envp);
+	if (dup2(fd[READ_FD], STDOUT_FILENO) == -1)
+		return (pipex_exit(data, NULL, NO_MEMORY, NULL));*/
+	recursive_pipex(data, envp);
 	close(data->input_fd);
 	close(data->output_fd);
 	return (NULL);

@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/09/25 17:18:19 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/09/27 18:38:14 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,52 +31,49 @@ ifeq ($(UNAME), Linux)
 	#Properties for Linux
 	ECHO = echo -e
 	LEAKS = valgrind --leak-check=full --show-leak-kinds=all -s -q 
-	CHECKER = tests/checker_linux
 endif
 
 # Make variables
+AR = ar rcs
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
-CC = gcc
-DIR_M = mandatory
-DIR_B = bonus
-DIR_OBJ = lib
-LIBFT = libft/libft.a
-NAME = pipex
+CC = gcc -MD
+SRC_DIR = src
+SRCB_DIR = src_bonus
+OBJ_DIR = obj
+OBJB_DIR = objb
+BIN_DIR = bin
+BIN = pipex
+NAME = $(BIN_DIR)/$(BIN)
+LIBFT = libft/bin/libft.a
 
-SOURCE_M = pipex.c pipex_utils.c
+SRC = pipex.c pipex_utils.c main.c
 
-SOURCE_B = 
+SRCB = 
 
-SRC_M = $(addprefix $(DIR_M)/, $(SOURCE_M)) tests/main.c
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
-SRC_B = $(addprefix $(DIR_B)/, $(SOURCE_B))
-
-OBJ_M = $(addprefix $(DIR_OBJ)/, $(SOURCE_M:.c=.o)) lib/main.o
-
-OBJ_B = $(addprefix $(DIR_OBJ)/, $(SOURCE_B:.c=.o))
+OBJB = $(addprefix $(OBJB_DIR)/, $(SRCB:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJ_M) compile_libft
-	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJ_M) $(LIBFT) -o $@
+$(NAME): create_dirs compile_libft $(OBJ) $(OBJB)
+	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJ) $(OBJB) $(LIBFT) -o $@
+	@$(ECHO) "$(GREEN)$(BIN) is up to date!$(DEFAULT)"
 
-$(OBJ_M): $(SRC_M)
-	@$(ECHO) "$(RED)Mandatory objects outdated in $(NAME)! Compiling again...$(DEFAULT)"
-	@$(CC) $(CFLAGS) $(CDEBUG) -c $^
-	@mv -f $(SOURCE_M:.c=.o) main.o $(DIR_OBJ)
-	@$(ECHO) "$(GREEN)Mandatory Compilation Complete in $(NAME)!$(DEFAULT)"
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@$(ECHO) "Compiling $(BLUE)$<$(DEFAULT)..."
+	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
 
-bonus: $(OBJ_B)
-
-$(OBJ_B): $(SRC_B)
-	@$(ECHO) "$(RED)Bonus objects outdated in $(NAME)! Compiling again...$(DEFAULT)"
-	@$(CC) $(CFLAGS) $(CDEBUG) -c $^
-	@mv -f $(SOURCE_B:.c=.o) $(DIR_OBJ)
-	@$(ECHO) "$(MAGENTA)Bonus Compilation Complete in $(NAME)!$(DEFAULT)"
+bonus: all
 
 compile_libft:
 	@make all -C libft/
+
+create_dirs:
+	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJB_DIR)
+	@mkdir -p $(BIN_DIR)
 
 test: all
 	@$(ECHO) "$(YELLOW)Performing test with custom parameters...$(DEFAULT)\n"
@@ -84,28 +81,31 @@ test: all
 	@$(LEAKS)./$(NAME) $(N)
 
 clean:
-	@$(ECHO) "$(BLUE)Cleaning up object files in $(NAME)...$(DEFAULT)"
+	@$(ECHO) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)"
 	@make clean -C libft
-	@$(RM) $(OBJ_M) $(OBJ_B)
+	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
+	@$(RM) -r $(BIN_DIR)
 	@$(RM) $(LIBFT)
-	@$(RM) libft/$(LIBFT)
 	@$(RM) $(NAME)
 	@$(ECHO) "$(CYAN)Removed $(NAME)$(DEFAULT)"
 	@$(ECHO) "$(CYAN)Removed $(LIBFT)$(DEFAULT)"
 
 norminette:
 	@$(ECHO) "$(CYAN)\nChecking norm for $(NAME)...$(DEFAULT)"
-	@norminette -R CheckForbiddenSourceHeader $(SRC_M) $(SRC_B) lib/
+	@norminette -R CheckForbiddenSourceHeader $(SRC_M) $(SRC_B) inc/
 	@make norminette -C libft/
 
 re: fclean all
-	@$(ECHO) "$(YELLOW)Cleaned and Rebuilt Everything for $(NAME)!$(DEFAULT)"
+	@$(ECHO) "$(YELLOW)Cleaned and Rebuilt Everything for $(BIN)!$(DEFAULT)"
 
 git:
 	git add .
 	git commit
 	git push
 
-.PHONY: all clean fclean bonus compile_libft norminette test git re
+-include $(OBJ_DIR)/*.d
+-include $(OBJB_DIR)/*.d
+
+.PHONY: all clean fclean bonus compile_libft norminette create_dirs test git re

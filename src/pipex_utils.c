@@ -6,11 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 16:37:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/27 16:00:21 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../lib/pipex.h"
+#include "../inc/pipex.h"
 
 void	pipex_freecmd(void *node)
 {

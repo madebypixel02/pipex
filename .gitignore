@@ -1,6 +1,9 @@
 libft
 a.out
+obj
+bin
 *.o
+*.d
 *.so
 *.a
 .DS_Store

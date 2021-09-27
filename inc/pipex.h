@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/25 17:15:10 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/27 18:38:01 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include "../libft/lib/libft.h"
-# include "../lib/colors.h"
+# include "../libft/inc/libft.h"
+# include "../inc/colors.h"
 
 # define READ_FD 0
+# define EAD_FD 0
 # define WRITE_FD 1
 
 /* Enum for error handling */
