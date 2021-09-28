@@ -6,12 +6,11 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/27 15:59:51 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/28 10:44:54 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
-#include <bits/types/struct_iovec.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
