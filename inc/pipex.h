@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/27 18:38:01 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/28 14:04:17 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@
 # include "../libft/inc/libft.h"
 # include "../inc/colors.h"
 
-# define READ_FD 0
-# define EAD_FD 0
-# define WRITE_FD 1
+# define READ_END 0
+# define WRITE_END 1
 
 /* Enum for error handling */
 enum e_pipex_error
