@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/28 15:04:59 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 12:29:49 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp)
 		execve(cmd->full_path, cmd->cmd, envp);
 		return (pipex_exit(data, NULL, 1, NULL));
 	}
+	
 	close(fd[READ_FD]);
 	if (dup2(STDOUT_FILENO, fd[WRITE_FD]) == -1)
 		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
@@ -113,10 +114,12 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp)
 void	*pipex(t_pipexdata *data, char **envp)
 {
 	t_pipexcmd	*cmd;
+	t_pipexcmd	*cmd2;
 	pid_t		pid;
 	int			fd[2];
 
 	cmd = (struct s_pipexcmd *)data->cmds->content;
+	cmd2 = (struct s_pipexcmd *)data->cmds->next->content;
 	if (!cmd)
 		return (pipex_exit(data, NULL, 1, NULL));
 	if (dup2(data->input_fd, STDIN_FILENO) == -1)
@@ -128,21 +131,30 @@ void	*pipex(t_pipexdata *data, char **envp)
 		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
 	if (!pid)
 	{
-		close(fd[READ_END]);
-		if (dup2(fd[WRITE_END], STDOUT_FILENO) == -1)
-			return (pipex_exit(data, NULL, NO_MEMORY, NULL));
-		if (dup2(STDOUT_FILENO, fd[WRITE_END]) == -1)
-			return (pipex_exit(data, NULL, NO_MEMORY, NULL));
-		ft_putstr_fd("CHILD!\n", 1);
+		pid = fork();
+		if (!pid)
+		{
+			close(fd[READ_END]);
+			if (dup2(fd[WRITE_END], STDOUT_FILENO) == -1)
+				return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+			execve(cmd->full_path, cmd->cmd, envp);
+			close(fd[WRITE_END]);
+			return (pipex_exit(data, NULL, 1, NULL));
+		}
 		close(fd[WRITE_END]);
-		execve(cmd->full_path, cmd->cmd, envp);
+		waitpid(pid, NULL, 0);
+		if (dup2(fd[READ_END], STDIN_FILENO) == -1)
+			return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+		if (dup2(data->output_fd, STDOUT_FILENO) == -1)
+			return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+		execve(cmd2->full_path, cmd2->cmd, envp);
+		close(fd[READ_END]);
 		return (pipex_exit(data, NULL, 1, NULL));
 	}
 	close(fd[WRITE_END]);
-	if (dup2(data->output_fd, fd[READ_END]) == -1)
-		return (pipex_exit(data, NULL, NO_MEMORY, NULL));
+	waitpid(pid, NULL, 0);
 	close(fd[READ_END]);
-	waitpid(-1, NULL, 0);
+	close(data->output_fd);
 	//recursive_pipex(data, envp);
 	close(data->input_fd);
 	close(data->output_fd);
