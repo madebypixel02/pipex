@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 18:22:26 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 18:24:11 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 	t_pipexdata	*data;
 
 	data = NULL;
-	if (argc != 5)
+	if (argc < 5)
 		return (*(int *)pipex_exit(data, NULL, INV_ARGS, NULL));
 	if (access(argv[1], F_OK) == -1)
 		return (*(int *)pipex_exit(data, argv[1], NO_FILE, NULL));
@@ -84,5 +84,5 @@ int	main(int argc, char **argv, char **envp)
 		return (*(int *)pipex_exit(data, argv[1], NO_PERM, NULL));
 	data = pipex_get_data(argc, argv, envp);
 	pipex(data, envp);
-	return (*(int *)pipex_exit(data, NULL, 1, NULL));
+	return (*(int *)pipex_exit(data, NULL, END, NULL));
 }

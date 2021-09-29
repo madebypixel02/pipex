@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/09/27 20:19:30 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/09/29 18:36:33 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,44 +35,60 @@ endif
 
 # Make variables
 AR = ar rcs
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -MD
 RM = rm -f
-CC = gcc -MD
+CC = gcc
 SRC_DIR = src
 SRCB_DIR = srcb
+SRC_LFT_DIR = src_lft
 OBJ_DIR = obj
 OBJB_DIR = objb
+OBJ_LFT_DIR = obj_lft
 BIN_DIR = bin
 BIN = pipex
 NAME = $(BIN_DIR)/$(BIN)
-LIBFT = libft/bin/libft.a
+
+SRC_LFT = ft_free_matrix.c ft_lstadd_back.c ft_lstclear.c	\
+		  ft_lstget_at.c ft_lstsize.c ft_putstr_fd.c		\
+		  ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c	\
+		  ft_strnstr.c ft_lstdelone.c ft_substr.c			\
+		  ft_strlcpy.c
 
 SRC = pipex.c pipex_utils.c main.c
 
-SRCB = 
+SRCB = pipex_bonus.c pipex_utils_bonus.c main_bonus.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+
+OBJ_LFT = $(addprefix $(OBJ_LFT_DIR)/, $(SRC_LFT:.c=.o))
 
 OBJB = $(addprefix $(OBJB_DIR)/, $(SRCB:.c=.o))
 
 all: $(NAME)
 
-$(NAME): create_dirs compile_libft $(OBJ) $(OBJB)
-	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJ) $(OBJB) $(LIBFT) -o $@
+$(NAME): create_dirs $(OBJ_LFT) $(OBJ)
+	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJ) $(OBJ_LFT) -o $@
 	@$(ECHO) "$(GREEN)$(BIN) is up to date!$(DEFAULT)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(ECHO) "Compiling $(BLUE)$<$(DEFAULT)..."
 	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
 
-bonus: all
+$(OBJ_LFT_DIR)/%.o: $(SRC_LFT_DIR)/%.c
+	@$(ECHO) "Compiling $(BLUE)$<$(DEFAULT)..."
+	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
+
+bonus: create_dirs $(OBJ_LFT) $(OBJB)
+	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJB) $(OBJ_LFT) -o $(NAME)
 	@$(ECHO) "$(MAGENTA)Bonus Compilation Complete in $(BIN)!$(DEFAULT)"
 
-compile_libft:
-	@make all -C libft/
+$(OBJB_DIR)/%.o: $(SRCB_DIR)/%.c
+	@$(ECHO) "Compiling $(BLUE)$<$(DEFAULT)..."
+	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
 
 create_dirs:
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_LFT_DIR)
 	@mkdir -p $(OBJB_DIR)
 	@mkdir -p $(BIN_DIR)
 
@@ -82,21 +98,18 @@ test: all
 	@$(LEAKS)./$(NAME) $(N)
 
 clean:
-	@$(ECHO) "$(CYAN)Cleaning up object files in $(NAME)...$(DEFAULT)"
-	@make clean -C libft
+	@$(ECHO) "$(CYAN)Cleaning up object files in $(OBJ_DIR), $(OBJB_DIR) and $(OBJ_LFT_DIR)...$(DEFAULT)"
 	@$(RM) -r $(OBJ_DIR)
 	@$(RM) -r $(OBJB_DIR)
+	@$(RM) -r $(OBJ_LFT_DIR)
 
 fclean: clean
 	@$(RM) -r $(BIN_DIR)
-	@$(RM) $(LIBFT)
-	@$(ECHO) "$(CYAN)Removed $(NAME)$(DEFAULT)"
-	@$(ECHO) "$(CYAN)Removed $(LIBFT)$(DEFAULT)"
+	@$(ECHO) "$(CYAN)Removed $(BIN)$(DEFAULT)"
 
 norminette:
 	@$(ECHO) "$(CYAN)\nChecking norm for $(BIN)...$(DEFAULT)"
-	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) $(SRCB_DIR) inc/
-	@make norminette -C libft/
+	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) $(SRCB_DIR) $(SRC_LFT_DIR) inc/
 
 re: fclean all
 	@$(ECHO) "$(YELLOW)Cleaned and Rebuilt Everything for $(BIN)!$(DEFAULT)"
@@ -108,5 +121,6 @@ git:
 
 -include $(OBJ_DIR)/*.d
 -include $(OBJB_DIR)/*.d
+-include $(OBJB_LFT_DIR)/*.d
 
-.PHONY: all clean fclean bonus compile_libft norminette create_dirs test git re
+.PHONY: all clean fclean bonus norminette create_dirs test git re

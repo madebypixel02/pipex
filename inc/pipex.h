@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/28 14:04:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 18:23:23 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
-# include "../libft/inc/libft.h"
+# include "../inc/libft_tools.h"
 # include "../inc/colors.h"
 
 # define READ_END 0
@@ -27,11 +27,15 @@
 /* Enum for error handling */
 enum e_pipex_error
 {
+	END = 1,
 	CMD_NOT_FOUND = 0,
 	NO_FILE = -1,
 	NO_PERM = -2,
 	INV_ARGS = -3,
-	NO_MEMORY = -4
+	NO_MEMORY = -4,
+	PIPE_ERR = -5,
+	DUP_ERR = -6,
+	FORK_ERR = -7
 };
 
 /* Struct to store fds and linked list */
@@ -40,6 +44,7 @@ typedef struct s_pipexdata
 	int		input_fd;
 	int		output_fd;
 	char	**env_path;
+	int		last_cmd_i;
 	t_list	*cmds;
 }				t_pipexdata;
 
@@ -55,9 +60,6 @@ t_list		*pipex_lstnew(char *full_path, char **cmd);
 
 /* Frees all stuf inside pipexcmd struct */
 void		pipex_freecmd(void *node);
-
-/* Prints linked list of commands */
-void		pipex_printlist(t_list *cmds);
 
 /* Finds correct path for a shell command and returns it as a string */
 int			find_command(t_pipexdata *data, char *cmd, char **full_path);
