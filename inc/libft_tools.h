@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 17:32:34 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 18:27:38 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 19:09:26 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,8 @@ t_list		*ft_lstget_at(t_list *lst, int i);
 
 /* Frees all allocated memory from a matrix (array of arrays) */
 void		ft_free_matrix(char ***m);
+
+/* Compares two strings up to the n-th character */
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 18:23:23 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 21:04:51 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ enum e_pipex_error
 /* Struct to store fds and linked list */
 typedef struct s_pipexdata
 {
-	int		input_fd;
-	int		output_fd;
+	int		in_fd;
+	int		out_fd;
 	char	**env_path;
 	int		last_cmd_i;
+	int		here_doc;
 	t_list	*cmds;
 }				t_pipexdata;
 
@@ -68,7 +69,7 @@ int			find_command(t_pipexdata *data, char *cmd, char **full_path);
 t_list		*parse_commands(int argc, char **argv, t_pipexdata *data);
 
 /* Fills up data struct */
-t_pipexdata	*pipex_get_data(int argc, char **argv, char **envp);
+t_pipexdata	*pipex_get_data(int argc, char **argv, int here_doc, char **envp);
 
 /* Prints "command not found" for given command to sderr  */
 void		pipex_perror(char *param, int err);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 17:35:51 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 23:58:13 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ void	*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd)
 		ft_free_matrix(cmd);
 	if (data)
 	{
-		close(data->input_fd);
-		close(data->output_fd);
+		close(data->in_fd);
+		if (data->here_doc)
+			unlink(".test");
+		close(data->out_fd);
 		if (data->cmds)
 			ft_lstclear(&data->cmds, pipex_freecmd);
 		if (data->env_path)

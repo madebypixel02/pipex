@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 18:22:26 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 19:14:27 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int	main(int argc, char **argv, char **envp)
 		return (*(int *)pipex_exit(data, argv[1], NO_FILE, NULL));
 	if (access(argv[1], R_OK) == -1)
 		return (*(int *)pipex_exit(data, argv[1], NO_PERM, NULL));
-	data = pipex_get_data(argc, argv, envp);
+	data = pipex_get_data(argc, argv, 0, envp);
+	data->cmds = parse_commands(argc, argv, data);
 	pipex(data, envp);
 	return (*(int *)pipex_exit(data, NULL, 1, NULL));
 }

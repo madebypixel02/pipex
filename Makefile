@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/09/29 18:36:33 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/09/29 19:07:04 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ SRC_LFT = ft_free_matrix.c ft_lstadd_back.c ft_lstclear.c	\
 		  ft_lstget_at.c ft_lstsize.c ft_putstr_fd.c		\
 		  ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c	\
 		  ft_strnstr.c ft_lstdelone.c ft_substr.c			\
-		  ft_strlcpy.c
+		  ft_strlcpy.c ft_strncmp.c
 
 SRC = pipex.c pipex_utils.c main.c
 

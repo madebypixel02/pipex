@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 18:24:11 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/29 23:53:27 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,98 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 	return (cmds);
 }
 
+char	*pipex_here_str(char *limit, char *final)
+{
+	char	c[1];
+	char	*buf;
+	char	*temp;
+
+	buf = NULL;
+	while (!buf || ft_strlen(buf) - 1 != ft_strlen(limit) || \
+			ft_strncmp(limit, buf, ft_strlen(buf) - 1))
+	{
+		temp = final;
+		final = ft_strjoin(final, buf);
+		free(temp);
+		free(buf);
+		buf = NULL;
+		*c = 0;
+		ft_putstr_fd("pipe heredoc> ", 1);
+		while (*c != '\n')
+		{
+			read(0, c, 1);
+			temp = buf;
+			buf = ft_strjoin(buf, c);
+			free(temp);
+		}
+	}
+	return (final);
+}
+
+/*void	pipex_here_fd(t_pipexdata *data, char *hdoc_str)
+{
+	int		fd[2];
+	pid_t	pid;
+
+	if (pipe(fd) == -1)
+		pipex_exit(data, NULL, PIPE_ERR, NULL);
+	pid = fork();
+	if (pid == -1)
+		pipex_exit(data, NULL, FORK_ERR, NULL);
+	if (!pid)
+	{
+		close(fd[READ_END]);
+		write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
+		close(fd[WRITE_END]);
+		free(hdoc_str);
+		pipex_exit(data, NULL, END, NULL);
+	}
+	else
+	{
+		waitpid(pid, NULL, 0);
+		close(fd[WRITE_END]);
+		data->in_fd = fd[READ_END];
+		free(hdoc_str);
+	}
+}*/
+
+void	pipex_here_fd(t_pipexdata *data, char *hdoc_str)
+{
+	data->in_fd = open(".test", O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (data->in_fd == -1)
+		pipex_exit(data, NULL, NO_MEMORY, NULL);
+	write(data->in_fd, hdoc_str, ft_strlen(hdoc_str));
+	free(hdoc_str);
+	close(data->in_fd);
+	data->in_fd = open(".test", O_RDONLY);
+	if (data->in_fd == -1)
+		pipex_exit(data, NULL, NO_MEMORY, NULL);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipexdata	*data;
+	int			here_doc;
 
-	data = NULL;
+	here_doc = !ft_strncmp(argv[1], "here_doc", 8);
 	if (argc < 5)
-		return (*(int *)pipex_exit(data, NULL, INV_ARGS, NULL));
-	if (access(argv[1], F_OK) == -1)
-		return (*(int *)pipex_exit(data, argv[1], NO_FILE, NULL));
-	if (access(argv[1], R_OK) == -1)
-		return (*(int *)pipex_exit(data, argv[1], NO_PERM, NULL));
-	data = pipex_get_data(argc, argv, envp);
+		return (*(int *)pipex_exit(NULL, NULL, INV_ARGS, NULL));
+	if (!here_doc && access(argv[1], F_OK) == -1)
+		return (*(int *)pipex_exit(NULL, argv[1], NO_FILE, NULL));
+	if (!here_doc && access(argv[1], R_OK) == -1)
+		return (*(int *)pipex_exit(NULL, argv[1], NO_PERM, NULL));
+	data = pipex_get_data(argc, argv, here_doc, envp);
+	data->in_fd = open(argv[1], O_RDONLY);
+	data->here_doc = here_doc;
+	if (here_doc)
+	{
+		if (argc < 6)
+			return (*(int *)pipex_exit(NULL, NULL, INV_ARGS, NULL));
+		pipex_here_fd(data, pipex_here_str(argv[2], NULL));
+		argv += 2;
+		argc -= 2;
+	}
+	data->cmds = parse_commands(argc, argv, data);
+	data->last_cmd_i = ft_lstsize(data->cmds) - 1;
 	pipex(data, envp);
-	return (*(int *)pipex_exit(data, NULL, END, NULL));
 }
