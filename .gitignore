@@ -1,6 +1,7 @@
 libft
 a.out
 obj
+obj_lft
 bin
 *.o
 *.d
