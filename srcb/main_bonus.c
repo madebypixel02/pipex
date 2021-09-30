@@ -6,12 +6,13 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/30 10:44:17 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/30 14:56:31 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 #include <fcntl.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -71,13 +72,12 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 	return (cmds);
 }
 
-char	*pipex_here_str(char *limit, char *final)
+char	*pipex_here_str(char *limit, char *buf, char *final)
 {
-	char	c[1];
-	char	*buf;
+	char	c[2];
 	char	*temp;
 
-	buf = NULL;
+	c[1] = '\0';
 	while (!buf || ft_strlen(buf) - 1 != ft_strlen(limit) || \
 			ft_strncmp(limit, buf, ft_strlen(buf) - 1))
 	{
@@ -96,6 +96,7 @@ char	*pipex_here_str(char *limit, char *final)
 			free(temp);
 		}
 	}
+	free(buf);
 	return (final);
 }
 
@@ -145,7 +146,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (argc < 6)
 			return (*(int *)pipex_exit(data, NULL, INV_ARGS, NULL));
-		pipex_here_fd(data, pipex_here_str(argv[2], NULL));
+		pipex_here_fd(data, pipex_here_str(argv[2], NULL, NULL));
 		argv++;
 		argc--;
 	}

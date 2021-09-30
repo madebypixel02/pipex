@@ -6,11 +6,12 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 22:34:09 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/30 14:52:32 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
+#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -66,8 +67,8 @@ void	*pipex_parent(t_pipexdata *data, int fd[2], pid_t pid, char **envp)
 	if (data->last_cmd_i == ft_lstsize(data->cmds) - 1 && \
 			dup2(data->out_fd, STDOUT_FILENO) == -1)
 		return (pipex_exit(data, NULL, DUP_ERR, NULL));
-	execve(cmd->full_path, cmd->cmd, envp);
 	close(fd[READ_END]);
+	execve(cmd->full_path, cmd->cmd, envp);
 	return (pipex_exit(data, NULL, END, NULL));
 }
 
