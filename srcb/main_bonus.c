@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 23:53:27 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/30 09:43:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,33 +99,6 @@ char	*pipex_here_str(char *limit, char *final)
 	return (final);
 }
 
-/*void	pipex_here_fd(t_pipexdata *data, char *hdoc_str)
-{
-	int		fd[2];
-	pid_t	pid;
-
-	if (pipe(fd) == -1)
-		pipex_exit(data, NULL, PIPE_ERR, NULL);
-	pid = fork();
-	if (pid == -1)
-		pipex_exit(data, NULL, FORK_ERR, NULL);
-	if (!pid)
-	{
-		close(fd[READ_END]);
-		write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
-		close(fd[WRITE_END]);
-		free(hdoc_str);
-		pipex_exit(data, NULL, END, NULL);
-	}
-	else
-	{
-		waitpid(pid, NULL, 0);
-		close(fd[WRITE_END]);
-		data->in_fd = fd[READ_END];
-		free(hdoc_str);
-	}
-}*/
-
 void	pipex_here_fd(t_pipexdata *data, char *hdoc_str)
 {
 	data->in_fd = open(".test", O_RDWR | O_CREAT | O_TRUNC, 0666);
@@ -144,9 +117,9 @@ int	main(int argc, char **argv, char **envp)
 	t_pipexdata	*data;
 	int			here_doc;
 
-	here_doc = !ft_strncmp(argv[1], "here_doc", 8);
 	if (argc < 5)
 		return (*(int *)pipex_exit(NULL, NULL, INV_ARGS, NULL));
+	here_doc = !ft_strncmp(argv[1], "here_doc", 8);
 	if (!here_doc && access(argv[1], F_OK) == -1)
 		return (*(int *)pipex_exit(NULL, argv[1], NO_FILE, NULL));
 	if (!here_doc && access(argv[1], R_OK) == -1)
@@ -159,8 +132,8 @@ int	main(int argc, char **argv, char **envp)
 		if (argc < 6)
 			return (*(int *)pipex_exit(NULL, NULL, INV_ARGS, NULL));
 		pipex_here_fd(data, pipex_here_str(argv[2], NULL));
-		argv += 2;
-		argc -= 2;
+		argv++;
+		argc--;
 	}
 	data->cmds = parse_commands(argc, argv, data);
 	data->last_cmd_i = ft_lstsize(data->cmds) - 1;
