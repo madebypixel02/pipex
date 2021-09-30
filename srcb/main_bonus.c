@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/30 09:43:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/30 09:53:03 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,29 @@ char	*pipex_here_str(char *limit, char *final)
 
 void	pipex_here_fd(t_pipexdata *data, char *hdoc_str)
 {
-	data->in_fd = open(".test", O_RDWR | O_CREAT | O_TRUNC, 0666);
-	if (data->in_fd == -1)
-		pipex_exit(data, NULL, NO_MEMORY, NULL);
-	write(data->in_fd, hdoc_str, ft_strlen(hdoc_str));
-	free(hdoc_str);
-	close(data->in_fd);
-	data->in_fd = open(".test", O_RDONLY);
-	if (data->in_fd == -1)
-		pipex_exit(data, NULL, NO_MEMORY, NULL);
+	int		fd[2];
+	pid_t	pid;
+
+	if (pipe(fd) == -1)
+		pipex_exit(data, NULL, PIPE_ERR, NULL);
+	pid = fork();
+	if (pid == -1)
+		pipex_exit(data, NULL, FORK_ERR, NULL);
+	if (!pid)
+	{
+		close(fd[READ_END]);
+		write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
+		close(fd[WRITE_END]);
+		free(hdoc_str);
+		pipex_exit(data, NULL, END, NULL);
+	}
+	else
+	{
+		waitpid(pid, NULL, 0);
+		close(fd[WRITE_END]);
+		data->in_fd = fd[READ_END];
+		free(hdoc_str);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
