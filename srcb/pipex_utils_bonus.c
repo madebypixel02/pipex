@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 23:58:13 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/30 09:54:36 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ void	*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd)
 	if (data)
 	{
 		close(data->in_fd);
-		if (data->here_doc)
-			unlink(".test");
 		close(data->out_fd);
 		if (data->cmds)
 			ft_lstclear(&data->cmds, pipex_freecmd);
