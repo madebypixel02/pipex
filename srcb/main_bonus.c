@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/30 09:53:03 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/09/30 10:44:17 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int	main(int argc, char **argv, char **envp)
 	if (here_doc)
 	{
 		if (argc < 6)
-			return (*(int *)pipex_exit(NULL, NULL, INV_ARGS, NULL));
+			return (*(int *)pipex_exit(data, NULL, INV_ARGS, NULL));
 		pipex_here_fd(data, pipex_here_str(argv[2], NULL));
 		argv++;
 		argc--;
@@ -152,4 +152,5 @@ int	main(int argc, char **argv, char **envp)
 	data->cmds = parse_commands(argc, argv, data);
 	data->last_cmd_i = ft_lstsize(data->cmds) - 1;
 	pipex(data, envp);
+	return (*(int *)pipex_exit(data, NULL, END, NULL));
 }
