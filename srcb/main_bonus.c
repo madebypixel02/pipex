@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 20:25:11 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/03 00:35:04 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	pipex_here_fd(t_pipexdata *d, char *hdoc_str)
 	{
 		close(fd[READ_END]);
 		write(fd[WRITE_END], hdoc_str, ft_strlen(hdoc_str));
+		d->in_fd = fd[READ_END];
 		close(fd[WRITE_END]);
 		free(hdoc_str);
 		return (*(int *)pipex_exit(d, NULL, END, NULL));

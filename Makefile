@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/02 20:26:23 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/10/03 00:30:10 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,7 +92,7 @@ create_dirs:
 	@mkdir -p $(OBJB_DIR)
 	@mkdir -p $(BIN_DIR)
 
-test: all
+test: bonus
 	@$(ECHO) "$(YELLOW)Performing test with custom parameters...$(DEFAULT)\n"
 	@$(ECHO) "Command: $(GRAY)$(LEAKS)./$(NAME) $(N)$(DEFAULT)\n"
 	@$(LEAKS)./$(NAME) $(N)
