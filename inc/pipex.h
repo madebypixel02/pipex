@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 12:07:58 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 20:11:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ enum e_pipex_error
 	PIPE_ERR = -5,
 	DUP_ERR = -6,
 	FORK_ERR = -7,
-	NO_PATH = -8
+	NO_PATH = -8,
+	CMD_FAIL = -9
 };
 
 /* Struct to store fds and linked list */
@@ -79,6 +80,6 @@ void		pipex_perror(char *param, int err);
 void		*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd);
 
 /* Creates a set of fds and forks to pass the output to a new command */
-void		*pipex(t_pipexdata *data, t_list *start, char **envp);
+void		*pipex(t_pipexdata *data, char **envp);
 
 #endif

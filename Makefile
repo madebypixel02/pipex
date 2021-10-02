@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/09/29 19:07:04 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/10/02 20:26:23 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,12 +30,12 @@ CHECKER = tests/checker_Mac
 ifeq ($(UNAME), Linux)
 	#Properties for Linux
 	ECHO = echo -e
-	LEAKS = valgrind --leak-check=full --show-leak-kinds=all -s -q 
+	LEAKS = valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes -s -q 
 endif
 
 # Make variables
 AR = ar rcs
-CFLAGS = -Wall -Wextra -Werror -MD
+CFLAGS = #-Wall -Wextra -Werror -MD
 RM = rm -f
 CC = gcc
 SRC_DIR = src

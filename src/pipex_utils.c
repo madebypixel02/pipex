@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 11:12:39 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 20:03:33 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd)
 		ft_free_matrix(cmd);
 	if (data)
 	{
+		close(STDIN_FILENO);
 		close(data->in_fd);
 		close(data->out_fd);
 		if (data->cmds)
@@ -80,7 +81,6 @@ void	*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd)
 
 void	pipex_perror(char *param, int err)
 {
-	ft_putstr_fd(RED, 2);
 	ft_putstr_fd("pipex: ", 2);
 	if (err == CMD_NOT_FOUND)
 		ft_putstr_fd("command not found: ", 2);
@@ -88,6 +88,8 @@ void	pipex_perror(char *param, int err)
 		ft_putstr_fd("no such file or directory: ", 2);
 	if (err == NO_PERM)
 		ft_putstr_fd("permission denied: ", 2);
+	if (err == CMD_FAIL)
+		ft_putstr_fd("command failed: ", 2);
 	if (err == INV_ARGS)
 		ft_putstr_fd("invalid number of arguments", 2);
 	if (err == NO_MEMORY)
@@ -100,8 +102,8 @@ void	pipex_perror(char *param, int err)
 		ft_putstr_fd("could not fork process", 2);
 	if (err == NO_PATH)
 		ft_putstr_fd("PATH variable is not set", 2);
-	if (param && (err == CMD_NOT_FOUND || err == NO_FILE || err == NO_PERM))
+	if (param && (err == CMD_NOT_FOUND || err == NO_FILE || err == NO_PERM || \
+			err == CMD_FAIL))
 		ft_putstr_fd(param, 2);
 	ft_putstr_fd("\n", 2);
-	ft_putstr_fd(DEFAULT, 2);
 }
