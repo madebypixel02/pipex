@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 23:57:47 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 10:25:25 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,13 @@ void	pipex_perror(char *param, int err)
 	if (err == NO_MEMORY)
 		ft_putstr_fd("no memory left on device", 2);
 	if (err == DUP_ERR)
-		ft_putstr_fd("error: could not create fd with dup2", 2);
+		ft_putstr_fd("could not create fd with dup2", 2);
 	if (err == PIPE_ERR)
-		ft_putstr_fd("error: could not create pipe", 2);
+		ft_putstr_fd("could not create pipe", 2);
 	if (err == FORK_ERR)
-		ft_putstr_fd("error: could not fork process", 2);
+		ft_putstr_fd("could not fork process", 2);
+	if (err == NO_PATH)
+		ft_putstr_fd("PATH variable is not set", 2);
 	if (param && (err == CMD_NOT_FOUND || err == NO_FILE || err == NO_PERM))
 		ft_putstr_fd(param, 2);
 	ft_putstr_fd("\n", 2);

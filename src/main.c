@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 19:14:27 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 10:41:44 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	find_command(t_pipexdata *data, char *cmd, char **full_path)
 
 	i = -1;
 	*full_path = NULL;
-	while (data->env_path[++i])
+	while (data->env_path && data->env_path[++i])
 	{
 		free(*full_path);
 		temp = ft_strjoin(data->env_path[i], "/");
@@ -35,7 +35,7 @@ int	find_command(t_pipexdata *data, char *cmd, char **full_path)
 		if (access(*full_path, F_OK) == 0)
 			break ;
 	}
-	if (!data->env_path[i])
+	if (!data->env_path || !data->env_path[i])
 	{
 		free(*full_path);
 		return (-1);
@@ -83,6 +83,8 @@ int	main(int argc, char **argv, char **envp)
 	if (access(argv[1], R_OK) == -1)
 		return (*(int *)pipex_exit(data, argv[1], NO_PERM, NULL));
 	data = pipex_get_data(argc, argv, 0, envp);
+	if (!argv[2][0])
+		pipex_perror(argv[2], NO_PERM);
 	data->cmds = parse_commands(argc, argv, data);
 	pipex(data, envp);
 	return (*(int *)pipex_exit(data, NULL, 1, NULL));

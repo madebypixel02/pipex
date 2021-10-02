@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 21:04:51 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 09:46:05 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ enum e_pipex_error
 	NO_MEMORY = -4,
 	PIPE_ERR = -5,
 	DUP_ERR = -6,
-	FORK_ERR = -7
+	FORK_ERR = -7,
+	NO_PATH = -8
 };
 
 /* Struct to store fds and linked list */

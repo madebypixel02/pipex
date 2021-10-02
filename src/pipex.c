@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 19:15:30 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 10:40:20 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, int here_doc, char **envp)
 		return ((t_pipexdata *)pipex_exit(data, argv[argc - 1], NO_FILE, NULL));
 	if (access(argv[argc - 1], W_OK) == -1)
 		return ((t_pipexdata *)pipex_exit(data, argv[argc - 1], NO_PERM, NULL));
-	while (!ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])))
+	while (envp[i] && !ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])))
 		i++;
 	data->env_path = ft_split(envp[i], ':');
 	if (!data->env_path)
-		return ((t_pipexdata *)pipex_exit(data, NULL, NO_MEMORY, NULL));
+		return ((t_pipexdata *)pipex_exit(data, NULL, NO_PATH, NULL));
 	return (data);
 }
 
