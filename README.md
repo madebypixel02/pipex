@@ -7,7 +7,7 @@
 * [The Pipex Algorithm](#the-pipex-algorithm)
 * [Bonus](#bonus)
   * [Multiple Pipes](#multiple-pipes)
-  * [Here_Doc](#here-doc)
+  * [Here Doc](#here-doc)
 * [Error and Leak Management](#error-and-leak-management)
   * [Error Handling](#error-handling)
   * [File Descriptor Leaks](#file-descriptor-leaks)
@@ -48,8 +48,8 @@ As mentioned before, this project is done with the help of a new set of tools: p
 | Function | Descripton | Return Value |
 | :-------:| :---------:| :----------: |
 | ``pipe(fd)`` | Recives a ``fd[2]`` and opens ``fd[0]`` for reading and ``fd[1]`` for writing | ``-1`` on error |
-| ``fork()`` | Splits process creating a child process with pid 0 | Process id of both processess (child = ``0``, parent > ``0``), ``-1`` on error |
-| ``dup2(oldfd, newfd)`` | Closes ``newfd`` if needed, then duplicates ``oldfd`` into ``newfd`` | -1 on error |
+| ``fork()`` | Splits process creating a child process with pid ``0`` | Process id of both processess (child = ``0``, parent > ``0``), ``-1`` on error |
+| ``dup2(oldfd, newfd)`` | Closes ``newfd`` if needed, then duplicates ``oldfd`` into ``newfd`` | ``-1`` on error |
 | ``execve(path, cmd, envp)`` | Receives full path of executable, NULL-terminated array of parameters, and environment. Replaces current process with that of the specified command | ``-1`` on error |
 
 
@@ -67,7 +67,7 @@ This project has two bonuses: multiple pipe handling, and here_doc stdin
 
 This bonus was quite simple to do. The algorithm described above will works exactly the same with more parameters, as the only thing that will be different is that the loop will have more nodes from the linked list to iterate over. Other than that, I removed the limitation of having *exactly* four parameters to having *at least* four parameters.
 
-### Here_Doc
+### Here Doc
 
 This one was a bit trickier, as it changes the way things will be parsed. This is the new shell command we have to copy:
 
@@ -77,13 +77,13 @@ This one was a bit trickier, as it changes the way things will be parsed. This i
 
 Let's break it down again:
 
-* ``cmd``: first command
-* ``<<``: used to start *here_doc* with *LIMITER*
-* ``LIMITER``: limiter word to stop reading from stdin
-* ``|``: pipe to link output of first command to input of the next
-* ``cmd1``: second command
-* ``>>``: redirect to file, creating or appending to it
-* ``file``: output file which may or may not exist
+* ``cmd``:  first command
+* ``<<``:   used to start *here_doc* with *LIMITER*
+* ``LIMITER``:  limiter word to stop reading from stdin
+* ``|``:  pipe to link output of first command to input of the next
+* ``cmd1``:   second command
+* ``>>``:   redirect to file, creating or appending to it
+* ``file``:  output file which may or may not exist
 
 Our program will parse these parameters as follows:
 
@@ -124,6 +124,7 @@ As you may have noticed from the table of the new functions, they all may result
 It is very important to keep in mind that children after a fork will inherit all open file descriptors. For this reason it is very important to close every possible file descriptor inside the child process to avoid these kinds of leaks. There are two ways of finding them:
 
 a) You can add the line ``while (1);`` right before your program ends. Once you run your pipex program it will get endlessly stuck in that loop. In a new terminal tab, enter the command ``lsof -c pipex`` (available in both Linux and MacOS). From here you will see several open file descriptors. Any line that has *PIPE* on it, or has the name of your infile or outfile is considered a file descriptor leak, so watch out!
+
 b) Valgrind has a few advanced options to check for file descriptor leaks, even on child processess. Just run your pipex command as follows: ``valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes -s -q ./pipex ...``
 
 ## Installation
@@ -141,11 +142,15 @@ make
 Basic usage
 
 ```
-make				compiles pipex program (mandatory part)
-make bonus			compiles bonus part into pipex binary
+make			compiles pipex program (mandatory part)
+make bonus		compiles bonus part into pipex binary
 make test N={args}	compiles bonus part and runs it with the given parameters
 make norminette		runs norminette on all source files
 ```
+
+Example
+
+![Pipex](https://user-images.githubusercontent.com/40824677/135733632-a23f8fce-c235-4b3d-8ba1-95bec53a38c6.gif)
 
 ## Summary
 
