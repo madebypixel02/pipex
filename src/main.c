@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 10:41:44 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 12:08:23 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ t_list	*parse_commands(int argc, char **argv, t_pipexdata *data)
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipexdata	*data;
+	t_list		*start;
 
 	data = NULL;
 	if (argc != 5)
@@ -86,6 +87,8 @@ int	main(int argc, char **argv, char **envp)
 	if (!argv[2][0])
 		pipex_perror(argv[2], NO_PERM);
 	data->cmds = parse_commands(argc, argv, data);
-	pipex(data, envp);
+	data->cmd_i = 0;
+	start = data->cmds;
+	pipex(data, start, envp);
 	return (*(int *)pipex_exit(data, NULL, 1, NULL));
 }

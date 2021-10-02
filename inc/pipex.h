@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 09:46:05 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 12:07:58 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_pipexdata
 	int		in_fd;
 	int		out_fd;
 	char	**env_path;
-	int		last_cmd_i;
+	int		cmd_i;
 	int		here_doc;
 	t_list	*cmds;
 }				t_pipexdata;
@@ -79,6 +79,6 @@ void		pipex_perror(char *param, int err);
 void		*pipex_exit(t_pipexdata *data, char *param, int err, char ***cmd);
 
 /* Creates a set of fds and forks to pass the output to a new command */
-void		*pipex(t_pipexdata *data, char **envp);
+void		*pipex(t_pipexdata *data, t_list *start, char **envp);
 
 #endif

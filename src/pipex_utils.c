@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 14:06:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 10:25:25 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 11:12:39 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	pipex_perror(char *param, int err)
 	if (err == NO_MEMORY)
 		ft_putstr_fd("no memory left on device", 2);
 	if (err == DUP_ERR)
-		ft_putstr_fd("could not create fd with dup2", 2);
+		ft_putstr_fd("could not dup fd", 2);
 	if (err == PIPE_ERR)
 		ft_putstr_fd("could not create pipe", 2);
 	if (err == FORK_ERR)

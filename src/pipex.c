@@ -6,11 +6,12 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:21 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 10:40:20 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/02 12:14:38 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
+#include <sys/_types/_pid_t.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -42,51 +43,45 @@ t_pipexdata	*pipex_get_data(int argc, char **argv, int here_doc, char **envp)
 	return (data);
 }
 
-void	*pipex_child(t_pipexdata *data, int fd[2], char **envp)
+void	*pipex_child(t_pipexdata *data, int fd[2], t_list *start, char **envp)
 {
-	int			pid;
 	t_pipexcmd	*cmd;
-	t_pipexcmd	*cmd2;
 
-	cmd = (struct s_pipexcmd *)data->cmds->content;
-	cmd2 = (struct s_pipexcmd *)data->cmds->next->content;
-	pid = fork();
-	if (!pid)
-	{
-		close(fd[READ_END]);
-		if (dup2(fd[WRITE_END], STDOUT_FILENO) == -1)
-			return (pipex_exit(data, NULL, DUP_ERR, NULL));
-		execve(cmd->full_path, cmd->cmd, envp);
-		close(fd[WRITE_END]);
-		return (pipex_exit(data, NULL, END, NULL));
-	}
-	close(fd[WRITE_END]);
-	waitpid(pid, NULL, 0);
-	if (dup2(fd[READ_END], STDIN_FILENO) == -1)
+	cmd = start->content;
+	if (!data->cmd_i && dup2(data->in_fd, STDIN_FILENO == -1))
 		return (pipex_exit(data, NULL, DUP_ERR, NULL));
-	if (dup2(data->out_fd, STDOUT_FILENO) == -1)
-		return (pipex_exit(data, NULL, DUP_ERR, NULL));
-	execve(cmd2->full_path, cmd2->cmd, envp);
+	close(data->in_fd);
 	close(fd[READ_END]);
+	if (start->next && dup2(fd[WRITE_END], STDOUT_FILENO == -1))
+		return (pipex_exit(data, NULL, DUP_ERR, NULL));
+	if (!start->next && dup2(data->out_fd, STDOUT_FILENO == -1))
+		return (pipex_exit(data, NULL, DUP_ERR, NULL));
+	close(fd[WRITE_END]);
+	execve(cmd->full_path, cmd->cmd, envp);
 	return (pipex_exit(data, NULL, END, NULL));
 }
 
-void	*pipex(t_pipexdata *data, char **envp)
+void	*pipex(t_pipexdata *data, t_list *start, char **envp)
 {
-	pid_t		pid;
 	int			fd[2];
+	pid_t		pid;
 
-	if (dup2(data->in_fd, STDIN_FILENO) == -1)
-		return (pipex_exit(data, NULL, DUP_ERR, NULL));
-	if (pipe(fd) == -1)
-		return (pipex_exit(data, NULL, PIPE_ERR, NULL));
-	pid = fork();
-	if (pid == -1)
-		return (pipex_exit(data, NULL, FORK_ERR, NULL));
-	if (!pid)
-		return (pipex_child(data, fd, envp));
-	close(fd[WRITE_END]);
-	waitpid(pid, NULL, 0);
-	close(fd[READ_END]);
+	while (start)
+	{
+		if (pipe(fd) == -1)
+			return (pipex_exit(data, NULL, PIPE_ERR, NULL));
+		pid = fork();
+		if (pid == -1)
+			return (pipex_exit(data, NULL, FORK_ERR, NULL));
+		if (!pid)
+			pipex_child(data, fd, start, envp);
+		close(fd[WRITE_END]);
+		waitpid(pid, NULL, 0);
+		if (start->next && dup2(fd[READ_END], STDIN_FILENO == -1))
+			return (pipex_exit(data, NULL, DUP_ERR, NULL));
+		close(fd[READ_END]);
+		data->cmd_i++;
+		start = start->next;
+	}
 	return (pipex_exit(data, NULL, END, NULL));
 }
