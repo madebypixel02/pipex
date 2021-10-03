@@ -150,7 +150,7 @@ make norminette		runs norminette on all source files
 
 Example
 
-![Pipex](https://user-images.githubusercontent.com/40824677/135733632-a23f8fce-c235-4b3d-8ba1-95bec53a38c6.gif)
+![Pipex](https://user-images.githubusercontent.com/40824677/135748301-fed0bbc2-adee-435e-97cb-b9f0f00506ed.gif)
 
 ## Summary
 
