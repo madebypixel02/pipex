@@ -105,9 +105,9 @@ what's up?
 oh, hello
 ```
 
-To implement this part, some opted with using ``get_next_line`` to read one line at a time till the limiter word is found. However, I found it easier to just use a new fork and read one character at a time, looking for the newline character '\n'. Then I check if the current line matches the limiter and if not I save it all to a buffer, starting all over again. Then I assign this buffer as the infile and I'm good to go :)o
+To implement this part, some chose to use ``get_next_line`` to read one line at a time till the limiter word is found. However, I found it easier to just use a new fork and read one character at a time, looking for the newline character ``\n``. Then I check if the current line matches the limiter and if not I save it all to a buffer, starting all over again. Then I assign this buffer as the infile and I'm good to go :)
 
-Regarding the outfile, it was also pretty straightforward, instead of truncating the outfile with the ``O_TRUNC`` flag, we instead open the outfile with the ``O_APPEND`` flag, and the other flags remain unchanged
+Regarding the outfile, it was also pretty straightforward, instead of truncating the outfile with the ``O_TRUNC`` flag, we open the outfile with the ``O_APPEND`` flag, and the other flags remain unchanged
 
 ## Error and Leak Management
 
@@ -116,7 +116,7 @@ This project introduced to some the idea of file descriptor leaks. Leaving one f
 
 ### Error Handling
 
-As you may have noticed from the table of the new functions, they all may result in an error for all sorts of reasons. This is why aside from the usual malloc protection we have to check and properly manage scenarios when these new functions may result in an error. Also we need to check that the ``infile`` and ``outfile`` exist and/or have the correct permissions. Not to mention that the parameters from the input may not exist. Hence, to handle all possible errors I created an enum to distinguish and handle all these different errors properly. Also, it was crucial to save most data on a ``t_pipexdata`` struct so that functions could have much easier access and freedom to tweak the various opetions stored in it. I made a function ``pipex_perror`` that will print a custom error message based on the error code, and also made another functions ``pipex_exit`` which easily frees the ``t_pipexdata`` struct to ensure all memory is freed flawlessly.
+As you may have noticed from the table of the new functions, they all may result in an error for all sorts of reasons. This is why aside from the usual malloc protection we have to check and properly manage scenarios when these new functions may result in an error. Also we need to check that the ``infile`` and ``outfile`` exist and/or have the correct permissions. Not to mention that the commands from the input may not exist. Hence, to handle all possible errors I created an enum to distinguish and handle all these different errors properly. Also, it was crucial to save most info on a ``t_pipexdata`` struct so that functions could be much more easily accessible. I made a function ``pipex_perror`` that will print a custom error message based on the error code, and also made another function ``pipex_exit`` which easily frees the ``t_pipexdata`` struct to ensure all memory is freed flawlessly.
 
 
 ### File Descriptor Leaks
