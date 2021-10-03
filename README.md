@@ -131,7 +131,14 @@ b) Valgrind has a few advanced options to check for file descriptor leaks, even 
 
 Contrary to previous projects, this one doesn't mention that using our [libft](https://github.com/madebypixel02/libft) is authorized. For this reason I have included all the necessary functions I used from my ``libft`` to the ``src_lft/`` folder. As usual, this repo includes a ``Makefile`` that compiles the ``pipex`` binary inside the ``bin/`` folder, wich is created automatically.
 
-Cloning the repository
+* Recommended Packages
+
+```
+gcc make clang git python-norminette (valgrind on linux)
+```
+
+
+* Cloning the repository
 
 ```shell
 git clone https://github.com/madebypixel02/pipex.git
@@ -139,7 +146,7 @@ cd pipex/
 make
 ```
 
-Basic usage
+* Basic usage
 
 ```
 make			compiles pipex program (mandatory part)
@@ -148,7 +155,7 @@ make test N={args}	compiles bonus part and runs it with the given parameters
 make norminette		runs norminette on all source files
 ```
 
-Example
+* Example
 
 ![Pipex](https://user-images.githubusercontent.com/40824677/135748301-fed0bbc2-adee-435e-97cb-b9f0f00506ed.gif)
 
