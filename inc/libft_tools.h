@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 17:32:34 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/03 11:51:24 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/03 11:55:44 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ typedef struct s_list
 
 /* Returns length of a string */
 size_t		ft_strlen(const char *s);
-
-/* Concatenates two strings ensuring it ends with \0 */
-size_t		ft_strlcat(char *dst, const char *src, size_t size);
 
 /* Copies n - 1 bytes from a source string to a destination string */
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);
