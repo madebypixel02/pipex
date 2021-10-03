@@ -6,7 +6,7 @@
 /*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/05 17:32:34 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/09/29 19:09:26 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/03 11:51:24 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,6 @@ t_list		*ft_lstnew(void *content);
 
 /* Returns number of elements of linked list */
 int			ft_lstsize(t_list *lst);
-
-/* Returns the node at the given index or null */
-t_list		*ft_lstget_at(t_list *lst, int i);
 
 /* Frees all allocated memory from a matrix (array of arrays) */
 void		ft_free_matrix(char ***m);

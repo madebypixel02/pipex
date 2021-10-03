@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/10/03 00:30:10 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/10/03 11:51:51 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,10 +49,10 @@ BIN = pipex
 NAME = $(BIN_DIR)/$(BIN)
 
 SRC_LFT = ft_free_matrix.c ft_lstadd_back.c ft_lstclear.c	\
-		  ft_lstget_at.c ft_lstsize.c ft_putstr_fd.c		\
+		  ft_lstsize.c ft_putstr_fd.c ft_strncmp.c			\
 		  ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c	\
 		  ft_strnstr.c ft_lstdelone.c ft_substr.c			\
-		  ft_strlcpy.c ft_strncmp.c
+		  ft_strlcpy.c
 
 SRC = pipex.c pipex_utils.c main.c
 
