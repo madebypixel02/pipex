@@ -35,7 +35,7 @@ endif
 
 # Make variables
 AR = ar rcs
-CFLAGS = #-Wall -Wextra -Werror -MD
+CFLAGS = -Wall -Wextra -Werror -MD
 RM = rm -f
 CC = gcc
 SRC_DIR = src
