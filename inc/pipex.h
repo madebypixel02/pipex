@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:53:59 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/02 20:11:58 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/10/06 15:43:46 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include "../inc/libft_tools.h"
-# include "../inc/colors.h"
 
 # define READ_END 0
 # define WRITE_END 1
@@ -46,7 +45,6 @@ typedef struct s_pipexdata
 	int		in_fd;
 	int		out_fd;
 	char	**env_path;
-	int		cmd_i;
 	int		here_doc;
 	t_list	*cmds;
 }				t_pipexdata;
