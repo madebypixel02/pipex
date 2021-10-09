@@ -7,7 +7,7 @@
 * [The Pipex Algorithm](#the-pipex-algorithm)
 * [Bonus](#bonus)
   * [Multiple Pipes](#multiple-pipes)
-  * [Here Doc](#here-doc)
+  * [Here Document](#here-document)
 * [Error and Leak Management](#error-and-leak-management)
   * [Error Handling](#error-handling)
   * [File Descriptor Leaks](#file-descriptor-leaks)
@@ -67,7 +67,7 @@ This project has two bonuses: multiple pipe handling, and here_doc stdin
 
 This bonus was quite simple to do. The algorithm described above will works exactly the same with more parameters, as the only thing that will be different is that the loop will have more nodes from the linked list to iterate over. Other than that, I removed the limitation of having *exactly* four parameters to having *at least* four parameters.
 
-### Here Doc
+### Here Document
 
 This one was a bit trickier, as it changes the way things will be parsed. This is the new shell command we have to copy:
 
@@ -78,7 +78,7 @@ This one was a bit trickier, as it changes the way things will be parsed. This i
 Let's break it down again:
 
 * ``cmd``:  first command
-* ``<<``:   used to start *here_doc* with *LIMITER*
+* ``<<``:   used to start *here_doc* (short for *here document*) with *LIMITER*
 * ``LIMITER``:  limiter word to stop reading from stdin
 * ``|``:  pipe to link output of first command to input of the next
 * ``cmd1``:   second command
