@@ -161,6 +161,6 @@ make norminette		runs norminette on all source files
 
 ## Summary
 
-This project was far more challeging than I thought it would, and it was quite hard to understand some of the new concepts. But after all that hussle the code itself was rather simple :)
+This project was far more challeging than I thought it would be, and it was quite hard to understand some of the new concepts. But after all that hussle the code itself was rather simple :)
 
 October 3rd, 2021
