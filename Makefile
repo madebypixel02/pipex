@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/12/15 19:02:08 by aperez-b         ###   ########.fr        #
+#    Updated: 2021/12/15 19:14:01 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,7 +111,7 @@ test: bonus
 	@$(LEAKS)./$(NAME) $(N)
 
 clean:
-	@$(PRINTF) "$(CYAN)Cleaning up object files in $(OBJ_DIR), $(OBJB_DIR) and $(OBJ_LFT_DIR)...$(DEFAULT)"
+	@$(PRINTF) "$(CYAN)Cleaning up object files in $(OBJ_DIR), $(OBJB_DIR) and $(OBJ_LFT_DIR)...$(DEFAULT)\n"
 	@$(RM) -r $(OBJ_DIR)
 	@$(RM) -r $(OBJB_DIR)
 	@$(RM) -r $(OBJ_LFT_DIR)
