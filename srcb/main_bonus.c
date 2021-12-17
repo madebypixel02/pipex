@@ -6,7 +6,7 @@
 /*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 18:52:57 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/10/03 00:35:04 by aperez-b         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:27:54 by aperez-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*pipex_here_str(char *limit, char *buf, char *final)
 		free(buf);
 		buf = NULL;
 		*c = 0;
-		ft_putstr_fd("pipe heredoc> ", 1);
+		ft_putstr_fd("> ", 1);
 		while (*c != '\n')
 		{
 			read(0, c, 1);
