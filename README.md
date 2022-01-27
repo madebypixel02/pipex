@@ -100,7 +100,7 @@ Note: *here_doc* must be written exactly *here_doc* to count as this bonus, othe
 The idea behind the *here_doc* is that you write input with your keyboard saving to stdin until a line matches perfectly with the *LIMITER* word. Here's an example:
 
 ```bash
-❯ << hello
+❯ << hello cat
 > hi there      
 > what's up?
 > oh, hello
