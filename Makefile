@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2021/12/15 19:47:36 by aperez-b         ###   ########.fr        #
+#    Updated: 2022/01/25 16:45:20 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -145,4 +145,4 @@ git:
 -include $(OBJB_DIR)/*.d
 -include $(OBJB_LFT_DIR)/*.d
 
-.PHONY: all clean fclean bonus norminette create_dirs test git re
+.PHONY: all clean fclean norminette create_dirs test git re
