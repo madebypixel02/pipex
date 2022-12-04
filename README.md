@@ -2,9 +2,9 @@
 
 *Go dance salsa somewhere 💃*
 
-<p align="center">
+<div align="center">
   <img src=https://user-images.githubusercontent.com/40824677/149230683-23045550-1baf-4c5d-a2dd-861711468c5a.png />
-</p>
+</div>
 
 ### Table of Contents
 * [Introduction](#introduction)
