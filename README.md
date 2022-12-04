@@ -169,9 +169,3 @@ make norminette		runs norminette on all source files
 This project was far more challeging than I thought it would be, and it was quite hard to understand some of the new concepts. But after all that hussle the code itself was rather simple :)
 
 October 3rd, 2021
-
-<p align="center">
-  <a href="https://github.com/madebypixel02/push_swap">&#11013;</a>
-  <a href="https://github.com/madebypixel02/42-Madrid-Cursus">&#127968;</a>
-  <a href="https://github.com/madebypixel02/philosophers">&#10145;</a>
-</p>
