@@ -110,7 +110,7 @@ what's up?
 oh, hello
 ```
 
-To implement this part, some chose to use [get_next_line](https://github.com/madebypixel02/get_next_line) to read one line at a time till the limiter word is found. However, I found it easier to just use a new fork and read one character at a time, looking for the newline character ``\n``. Then I check if the current line matches the limiter and if not I save it all to a buffer, starting all over again. Then I assign this buffer as the infile and I'm good to go :)
+To implement this part, some chose to use [get_next_line](https://gitlab.com/madebypixel02/get_next_line) to read one line at a time till the limiter word is found. However, I found it easier to just use a new fork and read one character at a time, looking for the newline character ``\n``. Then I check if the current line matches the limiter and if not I save it all to a buffer, starting all over again. Then I assign this buffer as the infile and I'm good to go :)
 
 Regarding the outfile, it was also pretty straightforward, instead of truncating the outfile with the ``O_TRUNC`` flag, we open the outfile with the ``O_APPEND`` flag, and the other flags remain unchanged
 
@@ -134,7 +134,7 @@ b) Valgrind has a few advanced options to check for file descriptor leaks, even 
 
 ## Installation
 
-Contrary to previous projects, this one doesn't mention that using our [libft](https://github.com/madebypixel02/libft) is authorized. For this reason I have included all the necessary functions I used from my ``libft`` to the ``src_lft/`` folder. As usual, this repo includes a ``Makefile`` that compiles the ``pipex`` binary inside the ``bin/`` folder, wich is created automatically.
+Contrary to previous projects, this one doesn't mention that using our [libft](https://gitlab.com/madebypixel02/libft) is authorized. For this reason I have included all the necessary functions I used from my ``libft`` to the ``src_lft/`` folder. As usual, this repo includes a ``Makefile`` that compiles the ``pipex`` binary inside the ``bin/`` folder, wich is created automatically.
 
 * Recommended Packages
 
@@ -146,7 +146,7 @@ gcc make clang git python-norminette (valgrind on linux)
 * Cloning the repository
 
 ```shell
-git clone https://github.com/madebypixel02/pipex.git
+git clone https://gitlab.com/madebypixel02/pipex.git
 cd pipex/
 make
 ```
