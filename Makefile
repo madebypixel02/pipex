@@ -6,7 +6,7 @@
 #    By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/29 10:50:06 by aperez-b          #+#    #+#              #
-#    Updated: 2022/01/25 16:45:20 by aperez-b         ###   ########.fr        #
+#    Updated: 2023/04/05 16:29:17 by aperez-b         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ ifeq ($(UNAME), Linux)
 endif
 
 # Make variables
+PRINTF = printf
 AR = ar rcs
 CFLAGS = -Wall -Wextra -Werror -MD
 RM = rm -f
@@ -46,7 +47,6 @@ OBJ_LFT_DIR = obj_lft
 BIN_DIR = bin
 BIN = pipex
 NAME = $(BIN_DIR)/$(BIN)
-PRINTF = LC_NUMERIC="en_US.UTF-8" printf
 
 SRC_LFT = ft_free_matrix.c ft_lstadd_back.c ft_lstclear.c	\
 		  ft_lstsize.c ft_putstr_fd.c ft_strncmp.c			\
@@ -86,33 +86,28 @@ SRC_LFT_PCT = $(shell expr 100 \* $(SRC_LFT_COUNT) / $(SRC_LFT_COUNT_TOT))
 
 all: $(NAME)
 
-$(NAME): create_dirs $(OBJ_LFT) $(OBJ)
+$(NAME): $(OBJ_LFT) $(OBJ) | $(BIN_DIR)
 	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJ) $(OBJ_LFT) -o $@
 	@$(PRINTF) "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
 	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
 	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
 
-$(OBJ_LFT_DIR)/%.o: $(SRC_LFT_DIR)/%.c
+$(OBJ_LFT_DIR)/%.o: $(SRC_LFT_DIR)/%.c | $(OBJ_LFT_DIR)
 	@$(eval SRC_LFT_COUNT = $(shell expr $(SRC_LFT_COUNT) + 1))
-	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_LFT_COUNT) $(SRC_LFT_COUNT_TOT) $(SRC_LFT_PCT)
+	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(YELLOW)$<$(DEFAULT)..." "" $(SRC_LFT_COUNT) $(SRC_LFT_COUNT_TOT) $(SRC_LFT_PCT)
 	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
 
-bonus: create_dirs $(OBJ_LFT) $(OBJB)
+bonus: $(OBJ_LFT) $(OBJB)
 	@$(CC) $(CFLAGS) $(CDEBUG) $(OBJB) $(OBJ_LFT) -o $(NAME)
+	@$(PRINTF) "\r%100s\r$(MAGENTA)Bonus $(BIN) is up to date!$(DEFAULT)\n"
 
-$(OBJB_DIR)/%.o: $(SRCB_DIR)/%.c
+$(OBJB_DIR)/%.o: $(SRCB_DIR)/%.c | $(OBJB_DIR)
 	@$(eval SRCB_COUNT = $(shell expr $(SRCB_COUNT) + 1))
-	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRCB_COUNT) $(SRCB_COUNT_TOT) $(SRCB_PCT)
+	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(MAGENTA)$<$(DEFAULT)..." "" $(SRCB_COUNT) $(SRCB_COUNT_TOT) $(SRCB_PCT)
 	@$(CC) $(CFLAGS) $(CDEBUG) -c $< -o $@
-
-create_dirs:
-	@mkdir -p $(OBJ_DIR)
-	@mkdir -p $(OBJ_LFT_DIR)
-	@mkdir -p $(OBJB_DIR)
-	@mkdir -p $(BIN_DIR)
 
 test: bonus
 	@$(PRINTF) "$(YELLOW)Performing test with custom parameters...$(DEFAULT)\n\n"
@@ -132,6 +127,18 @@ fclean: clean
 norminette:
 	@$(PRINTF) "$(CYAN)\nChecking norm for $(BIN)...$(DEFAULT)\n"
 	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR) $(SRCB_DIR) $(SRC_LFT_DIR) inc/
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJB_DIR):
+	@mkdir -p $(OBJB_DIR)
+
+$(OBJ_LFT_DIR):
+	@mkdir -p $(OBJ_LFT_DIR)
+
+$(BIN_DIR):
+	@mkdir -p $(BIN_DIR)
 
 re: fclean
 	@make all
